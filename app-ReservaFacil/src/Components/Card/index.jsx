@@ -29,7 +29,6 @@ export default function Card({
   reservaData,
   reservaHorario,
   reservaMesa,
-  reservaOcasiao,
 }) {
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -39,7 +38,7 @@ export default function Card({
   const [mesaSelecionada, setMesaSelecionada] = useState("");
   const [avaliacaoReserva, setAvaliacaoReserva] = useState(0);
 
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   const handleReservarMesa = () => {
     if (isLoggedIn === false) {

@@ -19,7 +19,6 @@ export function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (email === "usuario@example.com" && password === "123456") {
-      // Aqui você pode redirecionar o usuário para a página de dashboard, por exemplo
     } else {
       toast.error("Email ou senha incorretos.");
     }
@@ -33,7 +32,7 @@ export function Login() {
             fontFamily: "Arial, sans-serif",
             gap: "12px",
             padding: "16px",
-            fontSize: "14px"
+            fontSize: "14px",
           },
         }}
         position="top-center"

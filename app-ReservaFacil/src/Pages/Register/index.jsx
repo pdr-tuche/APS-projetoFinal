@@ -19,7 +19,6 @@ export function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Verifica se algum campo está vazio
     if (!email || !password || !confirmPassword) {
       toast.error("Por favor, preencha todos os campos.");
       return;

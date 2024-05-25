@@ -13,7 +13,7 @@ import { useLocation } from "react-router-dom";
 export default function Cabecalho() {
   const location = useLocation();
 
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   return (
     <CabecalhoContainer>
