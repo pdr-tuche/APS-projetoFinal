@@ -1,4 +1,10 @@
-import { SetasVoltar, Container, ContainerPoucasReservas, LinkExterno, Mensagem } from "./style";
+import {
+  SetasVoltar,
+  Container,
+  ContainerPoucasReservas,
+  LinkExterno,
+  Mensagem,
+} from "./style";
 import reservas from "../../assets/data/reservas.json";
 import Card from "../../Components/Card";
 import { ChevronLeft } from "lucide-react";
@@ -24,6 +30,9 @@ export function MinhasReservas() {
                 nome={reserva.nome}
                 localizacao={reserva.localizacao}
                 sobre={reserva.sobre}
+                reservaData={reserva.data}
+                reservaHorario={reserva.horario}
+                reservaMesa={reserva.mesa}
               />
             ))}
           </ContainerPoucasReservas>
@@ -36,6 +45,9 @@ export function MinhasReservas() {
                 nome={reserva.nome}
                 localizacao={reserva.localizacao}
                 sobre={reserva.sobre}
+                reservaData={reserva.data}
+                reservaHorario={reserva.horario}
+                reservaMesa={reserva.mesa}
               />
             ))}
           </Container>

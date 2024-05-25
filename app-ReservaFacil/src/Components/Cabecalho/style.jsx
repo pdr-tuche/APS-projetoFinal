@@ -23,7 +23,7 @@ export const MenuItens = styled.ul`
 `;
 
 export const ItemMenu = styled.li`
-  font-weight: 600;
+  text-transform: uppercase;
   color: #003285;
 
   &:hover {

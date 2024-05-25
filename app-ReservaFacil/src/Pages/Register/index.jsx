@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Toaster, toast } from "sonner";
 import {
   ContainerRegister,
   InputField,
@@ -6,23 +8,49 @@ import {
   RegisterForm,
   SubmitButton,
 } from "./style";
-
 import logo from "../../assets/img/logo.png";
 
 export function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Email:", email);
-    console.log("Senha:", password);
-    console.log("Confirmar Senha:", confirmPassword);
+
+    // Verifica se algum campo está vazio
+    if (!email || !password || !confirmPassword) {
+      toast.error("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error("As senhas não coincidem");
+      return;
+    }
+
+    toast.success("Cadastro realizado com sucesso!");
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
   };
 
   return (
     <ContainerRegister>
+      <Toaster
+        toastOptions={{
+          style: {
+            fontFamily: "Arial, sans-serif",
+            gap: "12px",
+            padding: "16px",
+            fontSize: "14px"
+          },
+        }}
+        position="top-center"
+        richColors
+      />
       <LogoTipo>
         <img src={logo} alt="Logo da Reserva Fácil" />
         <h1>Reserva Fácil</h1>

@@ -8,6 +8,7 @@ import {
   QuestionRegister,
   SubmitButton,
 } from "./style";
+import { Toaster, toast } from "sonner";
 
 import logo from "../../assets/img/logo.png";
 
@@ -17,18 +18,31 @@ export function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Aqui você pode adicionar a lógica para autenticar o usuário com o email e senha fornecidos
-    console.log("Email:", email);
-    console.log("Senha:", password);
+    if (email === "usuario@example.com" && password === "123456") {
+      // Aqui você pode redirecionar o usuário para a página de dashboard, por exemplo
+    } else {
+      toast.error("Email ou senha incorretos.");
+    }
   };
 
   return (
     <ContainerLogin>
+      <Toaster
+        toastOptions={{
+          style: {
+            fontFamily: "Arial, sans-serif",
+            gap: "12px",
+            padding: "16px",
+            fontSize: "14px"
+          },
+        }}
+        position="top-center"
+        richColors
+      />
       <LogoTipo>
         <img src={logo} alt="Logo da Reserva Fácil" />
         <h1>Reserva Fácil</h1>
       </LogoTipo>
-
       <LoginForm onSubmit={handleSubmit}>
         <InputField
           type="email"
