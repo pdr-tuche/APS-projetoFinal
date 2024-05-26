@@ -1,16 +1,31 @@
+import styled from "styled-components";
 import React, { useState } from "react";
-import Card from "../../Components/Card";
-import { Container } from "./style";
-import restaurants from "../../assets/data/restaurants.json";
 import { TextField, Box } from "@mui/material";
+
+import Card from "../../Components/Card";
+import restaurants from "../../assets/data/restaurants.json";
+
+const Container = styled.div`
+  padding: 32px 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+
+  @media (max-width: 850px){
+    display: flex;
+    flex-direction: column;
+  }
+`;
 
 export function Home() {
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Função para busca
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  // Filtrar restaurantes com base na busca
   const filteredRestaurants = restaurants.filter((restaurant) =>
     restaurant.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -24,17 +39,6 @@ export function Home() {
           variant="outlined"
           value={searchTerm}
           onChange={handleSearchChange}
-          sx={{
-            "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#003285", 
-            },
-            "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#003285", 
-            },
-            "&.Mui-focused .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#003285", 
-            },
-          }}
         />
       </Box>
       <Container>

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Toaster, toast } from "sonner";
+
 import {
   ContainerLogin,
   InputField,
@@ -8,7 +10,6 @@ import {
   QuestionRegister,
   SubmitButton,
 } from "./style";
-import { Toaster, toast } from "sonner";
 
 import logo from "../../assets/img/logo.png";
 
@@ -16,9 +17,11 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Função para enviar o formulário de login e verificar se está cadastrado
   const handleSubmit = (event) => {
     event.preventDefault();
     if (email === "usuario@example.com" && password === "123456") {
+      // Redirecionar para o Home
     } else {
       toast.error("Email ou senha incorretos.");
     }

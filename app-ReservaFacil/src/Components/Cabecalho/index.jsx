@@ -1,4 +1,6 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
+
 import {
   CabecalhoContainer,
   ItemMenu,
@@ -8,11 +10,11 @@ import {
   BarraMenu,
 } from "./style";
 import logo from "../../assets/img/logo.png";
-import { useLocation } from "react-router-dom";
 
 export default function Cabecalho() {
   const location = useLocation();
 
+  // Simulando o estado de login do usuário
   const isLoggedIn = true;
 
   return (
@@ -22,9 +24,6 @@ export default function Cabecalho() {
       </LinkEstilizado>
       <BarraMenu>
         <MenuItens>
-          <LinkEstilizado to="/">
-            <ItemMenu>Início</ItemMenu>
-          </LinkEstilizado>
           {isLoggedIn ? (
             <>
               <LinkEstilizado

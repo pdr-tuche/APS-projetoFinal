@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Toaster, toast } from "sonner";
+import { useLocation } from "react-router-dom";
 import {
   Card as MUICard,
   CardMedia,
@@ -16,9 +18,9 @@ import {
   MenuItem,
   Divider,
 } from "@mui/material";
-import { useLocation } from "react-router-dom";
+
+// Simulando banco de dados do restaurante
 import opcoesMesa from "../../assets/data/opcoesMesa.json";
-import { Toaster, toast } from "sonner";
 
 export default function Card({
   imagem,
@@ -31,15 +33,18 @@ export default function Card({
   reservaMesa,
 }) {
   const location = useLocation();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // Controle de permissão do botão de fazer reserva
+  
   const [nomeReserva, setNomeReserva] = useState("");
   const [dataReserva, setDataReserva] = useState("");
   const [horarioReserva, setHorarioReserva] = useState("");
   const [mesaSelecionada, setMesaSelecionada] = useState("");
   const [avaliacaoReserva, setAvaliacaoReserva] = useState(0);
 
+  // Simulando o estado de login do usuário
   const isLoggedIn = true;
 
+  // Função para abrir o formulário para fazer reserva
   const handleReservarMesa = () => {
     if (isLoggedIn === false) {
       toast.error(
@@ -50,14 +55,17 @@ export default function Card({
     }
   };
 
+  // Função de fechar o formulário da reserva
   const handleClose = () => {
     setOpen(false);
   };
 
+  // Função para selecionar a mesa
   const handleMesaChange = (event) => {
     setMesaSelecionada(event.target.value);
   };
 
+  // Função para efetuar a reserva 
   const handleReservar = () => {
     if (!nomeReserva || !dataReserva || !horarioReserva || !mesaSelecionada) {
       toast.error("Por favor, preencha todos os campos.");
@@ -75,7 +83,7 @@ export default function Card({
             fontFamily: "Arial, sans-serif",
             gap: "12px",
             padding: "16px",
-            fontSize: "14px"
+            fontSize: "14px",
           },
         }}
         position="bottom-right"
@@ -112,7 +120,7 @@ export default function Card({
             <Typography variant="body2">Data: {reservaData}</Typography>
             <Typography variant="body2">Horário: {reservaHorario}</Typography>
             <Typography variant="body2">Mesa: {reservaMesa}</Typography>
-            <Divider /> 
+            <Divider />
             <Typography variant="body2">Faça aqui sua avaliação</Typography>
             <Stack
               display={"flex"}

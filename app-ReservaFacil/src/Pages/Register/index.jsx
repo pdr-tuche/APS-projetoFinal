@@ -11,19 +11,23 @@ import {
 import logo from "../../assets/img/logo.png";
 
 export function Register() {
+  const navigate = useNavigate(); 
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
 
+  // Função para lidar com o envio do formulário
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    // Verificação se todos os campos estão preenchidos
     if (!email || !password || !confirmPassword) {
       toast.error("Por favor, preencha todos os campos.");
       return;
     }
 
+    // Verificação se as senhas coincidem
     if (password !== confirmPassword) {
       toast.error("As senhas não coincidem");
       return;
@@ -31,6 +35,7 @@ export function Register() {
 
     toast.success("Cadastro realizado com sucesso!");
 
+    // Redirecionar para a página de login após 2 segundos
     setTimeout(() => {
       navigate("/login");
     }, 2000);
@@ -44,7 +49,7 @@ export function Register() {
             fontFamily: "Arial, sans-serif",
             gap: "12px",
             padding: "16px",
-            fontSize: "14px"
+            fontSize: "14px",
           },
         }}
         position="top-center"

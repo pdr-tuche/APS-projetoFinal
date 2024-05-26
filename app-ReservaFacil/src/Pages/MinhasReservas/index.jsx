@@ -5,9 +5,11 @@ import {
   LinkExterno,
   Mensagem,
 } from "./style";
-import reservas from "../../assets/data/reservas.json";
 import Card from "../../Components/Card";
 import { ChevronLeft } from "lucide-react";
+
+// Simulando o banco de dados
+import reservas from "../../assets/data/reservas.json";
 
 export function MinhasReservas() {
   const temPoucasReservas = reservas.length < 2;
