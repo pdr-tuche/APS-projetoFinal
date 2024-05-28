@@ -12,8 +12,11 @@ import {
 } from "./style";
 
 import logo from "../../assets/img/logo.png";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -22,6 +25,7 @@ export function Login() {
     event.preventDefault();
     if (email === "usuario@example.com" && password === "123456") {
       // Redirecionar para o Home
+      navigate("/")
     } else {
       toast.error("Email ou senha incorretos.");
     }

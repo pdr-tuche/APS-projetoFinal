@@ -3,19 +3,22 @@
     "imagem": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "nome": "Osteria Francescana",
     "localizacao": "Via Stella, 22, Modena",
-    "sobre": "Osteria Francescana é conhecida por seus deliciosos pratos italianos."
+    "sobre": "Osteria Francescana é conhecida por seus deliciosos pratos italianos.",
+    "horarioFuncionamento": "Segunda a sábado: 12:00 - 22:00"
   },
   {
     "imagem": "https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "nome": "Narisawa",
     "localizacao": "Minami Aoyama, Tóquio",
-    "sobre": "Narisawa oferece uma experiência gastronômica única com pratos asiáticos."
+    "sobre": "Narisawa oferece uma experiência gastronômica única com pratos asiáticos.",
+    "horarioFuncionamento": "Terça a domingo: 18:00 - 23:00"
   },
   {
     "imagem": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "nome": "Le Bernardin",
     "localizacao": "155 W 51st St, Nova Iorque",
     "avaliacao": "5,0",
-    "sobre": "Le Bernardin é famoso por seu ambiente acolhedor e cozinha francesa."
+    "sobre": "Le Bernardin é famoso por seu ambiente acolhedor e cozinha francesa.",
+    "horarioFuncionamento": "Segunda a sexta: 18:00 - 23:30, Sábado e domingo: 12:00 - 23:30"
   }
 ]

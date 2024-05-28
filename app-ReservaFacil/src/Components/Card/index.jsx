@@ -11,16 +11,12 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  TextField,
   DialogActions,
   InputLabel,
   Select,
   MenuItem,
   Divider,
 } from "@mui/material";
-
-// Simulando banco de dados do restaurante
-import opcoesMesa from "../../assets/data/opcoesMesa.json";
 
 export default function Card({
   imagem,
@@ -31,20 +27,16 @@ export default function Card({
   reservaData,
   reservaHorario,
   reservaMesa,
+  horarioFuncionamento,
 }) {
   const location = useLocation();
-  const [open, setOpen] = useState(false); // Controle de permissão do botão de fazer reserva
-  
-  const [nomeReserva, setNomeReserva] = useState("");
+  const [open, setOpen] = useState(false);
   const [dataReserva, setDataReserva] = useState("");
   const [horarioReserva, setHorarioReserva] = useState("");
-  const [mesaSelecionada, setMesaSelecionada] = useState("");
   const [avaliacaoReserva, setAvaliacaoReserva] = useState(0);
 
-  // Simulando o estado de login do usuário
   const isLoggedIn = true;
 
-  // Função para abrir o formulário para fazer reserva
   const handleReservarMesa = () => {
     if (isLoggedIn === false) {
       toast.error(
@@ -55,24 +47,21 @@ export default function Card({
     }
   };
 
-  // Função de fechar o formulário da reserva
   const handleClose = () => {
     setOpen(false);
   };
 
-  // Função para selecionar a mesa
-  const handleMesaChange = (event) => {
-    setMesaSelecionada(event.target.value);
-  };
-
-  // Função para efetuar a reserva 
   const handleReservar = () => {
-    if (!nomeReserva || !dataReserva || !horarioReserva || !mesaSelecionada) {
+    if (!dataReserva || !horarioReserva) {
       toast.error("Por favor, preencha todos os campos.");
     } else {
       toast.success("Reserva realizada com sucesso.");
       handleClose();
     }
+  };
+
+  const handleCancelarReserva = () => {
+    toast.success("Reserva cancelada com sucesso.");
   };
 
   return (
@@ -113,8 +102,10 @@ export default function Card({
             <Rating value={avaliacao} readOnly size="small" />
           )}
         </Stack>
-
-        <Typography variant="body2">{sobre}</Typography>
+        <Typography variant="body2">{sobre}</Typography>{" "}
+        <Typography variant="body2">
+          Horário de Funcionamento: {horarioFuncionamento}
+        </Typography>
         {location.pathname === "/MinhasReservas" ? (
           <Stack spacing={1}>
             <Typography variant="body2">Data: {reservaData}</Typography>
@@ -138,6 +129,14 @@ export default function Card({
                 }}
               />
             </Stack>
+            <Button
+              variant="contained"
+              color="error"
+              fullWidth
+              onClick={handleCancelarReserva}
+            >
+              Cancelar Reserva
+            </Button>
           </Stack>
         ) : (
           <Button
@@ -156,51 +155,29 @@ export default function Card({
               style={{ display: "flex", flexDirection: "column", gap: "12px" }}
             >
               <div>
-                <InputLabel htmlFor="nome">Nome</InputLabel>
-                <TextField
-                  autoFocus
-                  id="nome"
-                  type="text"
-                  fullWidth
-                  value={nomeReserva}
-                  onChange={(e) => setNomeReserva(e.target.value)}
-                />
-              </div>
-              <div>
                 <InputLabel htmlFor="data">Data</InputLabel>
-                <TextField
+                <Select
                   id="data"
-                  type="date"
                   fullWidth
                   value={dataReserva}
                   onChange={(e) => setDataReserva(e.target.value)}
-                />
+                >
+                  <MenuItem value="2024-05-28">28/05/2024</MenuItem>
+                  <MenuItem value="2024-05-29">29/05/2024</MenuItem>
+                </Select>
               </div>
 
               <div>
                 <InputLabel htmlFor="horario">Horário</InputLabel>
-                <TextField
+                <Select
                   id="horario"
-                  type="time"
                   fullWidth
                   value={horarioReserva}
                   onChange={(e) => setHorarioReserva(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <InputLabel htmlFor="escolha-mesa">Escolha de Mesa</InputLabel>
-                <Select
-                  id="escolha-mesa"
-                  value={mesaSelecionada}
-                  onChange={handleMesaChange}
-                  fullWidth
                 >
-                  {opcoesMesa.map((opcao, index) => (
-                    <MenuItem key={index} value={opcao}>
-                      {opcao}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value="10:00">10:00</MenuItem>
+                  <MenuItem value="12:00">12:00</MenuItem>
+                  <MenuItem value="15:00">15:00</MenuItem>
                 </Select>
               </div>
             </form>

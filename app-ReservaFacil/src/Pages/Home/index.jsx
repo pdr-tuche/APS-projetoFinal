@@ -49,6 +49,7 @@ export function Home() {
             nome={restaurant.nome}
             localizacao={restaurant.localizacao}
             avaliacao={restaurant.avaliacao}
+            horarioFuncionamento={restaurant.horarioFuncionamento}
             sobre={restaurant.sobre}
           />
         ))}
