@@ -28,5 +28,7 @@ urlpatterns = [
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('users/', include('user.urls')),
+    path('restaurants/', include('restaurant.urls')),
+    path('ratings/', include('rating.urls')),
 
 ]
