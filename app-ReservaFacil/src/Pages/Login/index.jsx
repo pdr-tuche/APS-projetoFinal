@@ -23,7 +23,7 @@ export function Login() {
   // Função para enviar o formulário de login e verificar se está cadastrado
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (email === "usuario@example.com" && password === "123456") {
+    if (email === "usuario@gmail.com" && password === "1234") {
       // Redirecionar para o Home
       navigate("/")
     } else {

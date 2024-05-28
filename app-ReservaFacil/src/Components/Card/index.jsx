@@ -103,14 +103,10 @@ export default function Card({
           )}
         </Stack>
         <Typography variant="body2">{sobre}</Typography>{" "}
-        <Typography variant="body2">
-          Horário de Funcionamento: {horarioFuncionamento}
-        </Typography>
         {location.pathname === "/MinhasReservas" ? (
           <Stack spacing={1}>
             <Typography variant="body2">Data: {reservaData}</Typography>
             <Typography variant="body2">Horário: {reservaHorario}</Typography>
-            <Typography variant="body2">Mesa: {reservaMesa}</Typography>
             <Divider />
             <Typography variant="body2">Faça aqui sua avaliação</Typography>
             <Stack
@@ -164,6 +160,8 @@ export default function Card({
                 >
                   <MenuItem value="2024-05-28">28/05/2024</MenuItem>
                   <MenuItem value="2024-05-29">29/05/2024</MenuItem>
+                  <MenuItem value="2024-05-29">30/05/2024</MenuItem>
+
                 </Select>
               </div>
 
@@ -175,9 +173,9 @@ export default function Card({
                   value={horarioReserva}
                   onChange={(e) => setHorarioReserva(e.target.value)}
                 >
-                  <MenuItem value="10:00">10:00</MenuItem>
-                  <MenuItem value="12:00">12:00</MenuItem>
-                  <MenuItem value="15:00">15:00</MenuItem>
+                  <MenuItem value="10:00">18:00</MenuItem>
+                  <MenuItem value="12:00">19:00</MenuItem>
+                  <MenuItem value="15:00">20:00</MenuItem>
                 </Select>
               </div>
             </form>

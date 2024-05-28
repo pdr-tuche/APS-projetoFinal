@@ -32,7 +32,7 @@ export default function Cabecalho() {
               >
                 <ItemMenu>Minhas Reservas</ItemMenu>
               </LinkEstilizado>
-              <LinkEstilizado to="">
+              <LinkEstilizado to="/login">
                 <ItemMenu>Sair</ItemMenu>
               </LinkEstilizado>
             </>
