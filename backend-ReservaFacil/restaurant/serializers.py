@@ -7,4 +7,4 @@ from rating.serializers import RatingSerializer
 class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
-        fields = ['id', 'name', 'description', 'address', 'manager']
+        fields = ['id', 'name', 'description', 'address', 'reservations', 'manager']

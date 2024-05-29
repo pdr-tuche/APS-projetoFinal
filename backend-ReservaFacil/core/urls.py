@@ -30,5 +30,6 @@ urlpatterns = [
     path('users/', include('user.urls')),
     path('restaurants/', include('restaurant.urls')),
     path('ratings/', include('rating.urls')),
+    path('schedules/', include('scheduling.urls')),
 
 ]

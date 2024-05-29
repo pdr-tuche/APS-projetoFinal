@@ -6,7 +6,7 @@ import shutil
 backup_folder = "./"
 
 # Lista todos os arquivos de backup na pasta
-backup_files = glob.glob(os.path.join(backup_folder, "backup_*.sqlite3"))
+backup_files = glob.glob(os.path.join(backup_folder, "agora.db"))
 
 # Verifica se há algum backup disponível
 if backup_files:

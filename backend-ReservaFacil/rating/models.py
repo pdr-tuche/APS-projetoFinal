@@ -6,4 +6,4 @@ class Rating(models.Model):
     user = models.ForeignKey('user.User', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.rating} - {self.restaurant.name} - {self.user.username}'
+        return f'{self.rating} - {self.restaurant.name} - {self.user.name}'

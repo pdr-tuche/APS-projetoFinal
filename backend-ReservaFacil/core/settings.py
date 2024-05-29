@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'user',
     'restaurant',
     'rating',
+    'scheduling'
 ]
 
 MIDDLEWARE = [
