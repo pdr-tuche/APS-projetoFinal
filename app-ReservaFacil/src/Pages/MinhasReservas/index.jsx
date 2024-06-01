@@ -32,9 +32,9 @@ export function MinhasReservas() {
                 nome={reserva.nome}
                 localizacao={reserva.localizacao}
                 sobre={reserva.sobre}
+                horarioFuncionamento={reserva.horarioFuncionamento}
                 reservaData={reserva.data}
                 reservaHorario={reserva.horario}
-                reservaMesa={reserva.mesa}
               />
             ))}
           </ContainerPoucasReservas>

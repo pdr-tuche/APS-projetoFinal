@@ -23,17 +23,16 @@ export default function Card({
   nome,
   localizacao,
   sobre,
-  avaliacao,
+  horarioFuncionamento,
   reservaData,
   reservaHorario,
-  reservaMesa,
-  horarioFuncionamento,
 }) {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [dataReserva, setDataReserva] = useState("");
   const [horarioReserva, setHorarioReserva] = useState("");
   const [avaliacaoReserva, setAvaliacaoReserva] = useState(0);
+  const [avaliacoes, setAvaliacoes] = useState([]);
 
   const isLoggedIn = true;
 
@@ -63,6 +62,22 @@ export default function Card({
   const handleCancelarReserva = () => {
     toast.success("Reserva cancelada com sucesso.");
   };
+
+  const handleAvaliar = (newValue) => {
+    setAvaliacaoReserva(newValue);
+    setAvaliacoes((prev) => {
+      const novasAvaliacoes = [...prev, newValue];
+      const media =
+        novasAvaliacoes.reduce((acc, curr) => acc + curr, 0) /
+        novasAvaliacoes.length;
+      return { media, novasAvaliacoes };
+    });
+    toast.success("Avaliação realizada com sucesso.");
+  };
+
+  const mediaAvaliacoes = avaliacoes.length
+    ? avaliacoes.reduce((acc, curr) => acc + curr, 0) / avaliacoes.length
+    : 0;
 
   return (
     <MUICard>
@@ -99,12 +114,14 @@ export default function Card({
             </Typography>
           </Stack>
           {location.pathname !== "/MinhasReservas" && (
-            <Rating value={avaliacao} readOnly size="small" />
+            <Rating name="media-avaliacoes" value={mediaAvaliacoes} readOnly />
           )}
         </Stack>
-        <Typography variant="body2">{sobre}</Typography>{" "}
+        <Typography variant="body2">{sobre}</Typography>
+        <Typography variant="body2">{horarioFuncionamento}</Typography>
         {location.pathname === "/MinhasReservas" ? (
           <Stack spacing={1}>
+            <Divider />
             <Typography variant="body2">Data: {reservaData}</Typography>
             <Typography variant="body2">Horário: {reservaHorario}</Typography>
             <Divider />
@@ -120,8 +137,7 @@ export default function Card({
                 name="avaliacaoReserva"
                 value={avaliacaoReserva}
                 onChange={(event, newValue) => {
-                  setAvaliacaoReserva(newValue);
-                  toast.success("Avaliação realizada com sucesso.");
+                  handleAvaliar(newValue);
                 }}
               />
             </Stack>
@@ -161,10 +177,8 @@ export default function Card({
                   <MenuItem value="2024-05-28">28/05/2024</MenuItem>
                   <MenuItem value="2024-05-29">29/05/2024</MenuItem>
                   <MenuItem value="2024-05-29">30/05/2024</MenuItem>
-
                 </Select>
               </div>
-
               <div>
                 <InputLabel htmlFor="horario">Horário</InputLabel>
                 <Select

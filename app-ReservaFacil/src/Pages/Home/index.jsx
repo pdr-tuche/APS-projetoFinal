@@ -49,8 +49,10 @@ export function Home() {
             nome={restaurant.nome}
             localizacao={restaurant.localizacao}
             avaliacao={restaurant.avaliacao}
-            horarioFuncionamento={restaurant.horarioFuncionamento}
             sobre={restaurant.sobre}
+            horarioFuncionamento={restaurant.horarioFuncionamento}
+            datasDisponiveis={restaurant.datasDisponiveis}
+            horariosDisponiveis={restaurant.horarioFuncionamento}
           />
         ))}
       </Container>

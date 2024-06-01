@@ -4,9 +4,8 @@
     "nome": "Osteria Francescana",
     "localizacao": "Via Stella, 22, Modena",
     "sobre": "Osteria Francescana é conhecida por seus deliciosos pratos italianos.",
+    "horarioFuncionamento": "Segunda a sábado: 12:00 - 22:00",
     "data": "30/05/2024",
-    "horario": "20:00",
-    "mesa": "Mesa 1",
-    "ocasiao": "Aniversário"
+    "horario": "20:00"
   }
 ]
