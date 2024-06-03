@@ -26,4 +26,44 @@ export class UserService {
   findByEmail(email: string) {
     return this.prisma.user.findUnique({ where: { email } });
   }
+
+  async findAll() {
+    const users = await this.prisma.user.findMany();
+    return users.map((user) => {
+      return {
+        ...user,
+        password: undefined,
+      };
+    });
+  }
+
+  async findById(id: number) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    return {
+      ...user,
+      password: undefined,
+    };
+  }
+
+  async update(id: number, newUser: CreateUserDto) {
+    const data: Prisma.UserUpdateInput = {
+      ...newUser,
+      password: await bcrypt.hash(newUser.password, 10),
+    };
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data,
+    });
+
+    return {
+      ...updatedUser,
+      password: undefined,
+    };
+  }
+
+  async delete(id: number) {
+    await this.prisma.user.delete({ where: { id } });
+    return true;
+  }
 }
