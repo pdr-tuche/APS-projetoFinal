@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 
 @Injectable()
 export class UserService {
@@ -28,17 +29,14 @@ export class UserService {
   }
 
   async findAll() {
-    const users = await this.prisma.user.findMany();
-    return users.map((user) => {
-      return {
-        ...user,
-        password: undefined,
-      };
-    });
+    return await this.prisma.user.findMany({ include: { restaurants: true } });
   }
 
   async findById(id: number) {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { restaurants: true },
+    });
     return {
       ...user,
       password: undefined,

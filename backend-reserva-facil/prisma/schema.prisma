@@ -20,6 +20,20 @@ model User {
   name     String
   role     String
   password String
+  restaurants Restaurant[]
 
   @@map("users")
+}
+
+model Restaurant {
+  id Int @id @default(autoincrement())
+
+  name         String
+  description  String
+  address      String
+  reservations Int
+  UserId       Int
+  manager      User   @relation(fields: [UserId], references: [id])
+
+  @@map("restaurants")
 }
