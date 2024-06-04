@@ -22,10 +22,10 @@ import { SchedulesModule } from './schedules/schedules.module';
   providers: [
     UserService,
     // colocar autenticacao nas rotas
-    {
+    /*{
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
-    },
+    },*/
   ],
 })
 export class AppModule {}
