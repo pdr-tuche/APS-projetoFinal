@@ -7,6 +7,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { RatingsModule } from './ratings/ratings.module';
+import { SchedulesModule } from './schedules/schedules.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { RatingsModule } from './ratings/ratings.module';
     AuthModule,
     RestaurantsModule,
     RatingsModule,
+    SchedulesModule,
   ],
   controllers: [],
   providers: [

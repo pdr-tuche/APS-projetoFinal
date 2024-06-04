@@ -16,12 +16,13 @@ generator client {
 model User {
   id Int @id @default(autoincrement())
 
-  email    String @unique
-  name     String
-  role     String
-  password String
+  email       String       @unique
+  name        String
+  role        String
+  password    String
   restaurants Restaurant[]
-  ratings Ratings[]
+  ratings     Ratings[]
+  Schedule    Schedule[]
 
   @@map("users")
 }
@@ -34,8 +35,9 @@ model Restaurant {
   address      String
   reservations Int
   UserId       Int
-  manager      User   @relation(fields: [UserId], references: [id])
+  manager      User       @relation(fields: [UserId], references: [id])
   ratings      Ratings[]
+  Schedule     Schedule[]
 
   @@map("restaurants")
 }
@@ -43,13 +45,26 @@ model Restaurant {
 model Ratings {
   id Int @id @default(autoincrement())
 
-  rating     Int
-  comment    String
+  rating       Int
+  comment      String
   restaurantId Int
-  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
-  userId Int
-  user User @relation(fields: [userId], references: [id])
-
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  userId       Int
+  user         User       @relation(fields: [userId], references: [id])
 
   @@map("ratings")
+}
+
+model Schedule {
+  id Int @id @default(autoincrement())
+
+  day          String
+  checkIn      String
+  checkOut     String
+  restaurantId Int
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  userId       Int
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@map("schedules")
 }
