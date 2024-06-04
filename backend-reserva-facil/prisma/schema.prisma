@@ -21,6 +21,7 @@ model User {
   role     String
   password String
   restaurants Restaurant[]
+  ratings Ratings[]
 
   @@map("users")
 }
@@ -34,6 +35,21 @@ model Restaurant {
   reservations Int
   UserId       Int
   manager      User   @relation(fields: [UserId], references: [id])
+  ratings      Ratings[]
 
   @@map("restaurants")
+}
+
+model Ratings {
+  id Int @id @default(autoincrement())
+
+  rating     Int
+  comment    String
+  restaurantId Int
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+
+  @@map("ratings")
 }

@@ -6,9 +6,16 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
+import { RatingsModule } from './ratings/ratings.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule, RestaurantsModule],
+  imports: [
+    PrismaModule,
+    UserModule,
+    AuthModule,
+    RestaurantsModule,
+    RatingsModule,
+  ],
   controllers: [],
   providers: [
     UserService,
