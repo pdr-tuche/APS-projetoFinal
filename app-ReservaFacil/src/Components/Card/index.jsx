@@ -17,6 +17,7 @@ import {
   MenuItem,
   Divider,
 } from "@mui/material";
+import axios from "axios";
 
 export default function Card({
   imagem,
@@ -26,6 +27,8 @@ export default function Card({
   horarioFuncionamento,
   reservaData,
   reservaHorario,
+  userID,
+  restaurantID,
 }) {
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -34,28 +37,41 @@ export default function Card({
   const [avaliacaoReserva, setAvaliacaoReserva] = useState(0);
   const [avaliacoes, setAvaliacoes] = useState([]);
 
-  const isLoggedIn = true;
-
-  const handleReservarMesa = () => {
-    if (isLoggedIn === false) {
-      toast.error(
-        "É necessário estar logado para efetuar a reserva de uma mesa."
-      );
-    } else {
-      setOpen(true);
-    }
+  const handleOpen = () => {
+    setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleReservar = () => {
+  const handleReservar = async () => {
     if (!dataReserva || !horarioReserva) {
       toast.error("Por favor, preencha todos os campos.");
-    } else {
-      toast.success("Reserva realizada com sucesso.");
-      handleClose();
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "https://aps-projetofinal-backend.onrender.com/schedules",
+        {
+          day: dataReserva,
+          checkIn: horarioReserva,
+          checkOut: "00:00",
+          restaurantId: restaurantID,
+          userId: userID,
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success("Reserva realizada com sucesso.");
+        handleClose();
+      } else {
+        toast.error("Erro ao realizar a reserva. Tente novamente.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao realizar a reserva. Tente novamente.");
     }
   };
 
@@ -155,7 +171,7 @@ export default function Card({
             variant="contained"
             sx={{ backgroundColor: "#003285" }}
             fullWidth
-            onClick={handleReservarMesa}
+            onClick={handleOpen}
           >
             Reservar mesa
           </Button>
@@ -174,9 +190,9 @@ export default function Card({
                   value={dataReserva}
                   onChange={(e) => setDataReserva(e.target.value)}
                 >
-                  <MenuItem value="2024-05-28">28/05/2024</MenuItem>
-                  <MenuItem value="2024-05-29">29/05/2024</MenuItem>
-                  <MenuItem value="2024-05-29">30/05/2024</MenuItem>
+                  <MenuItem value="06/06/2024">06/06/2024</MenuItem>
+                  <MenuItem value="07/06/2024">07/06/2024</MenuItem>
+                  <MenuItem value="08/06/2024">08/06/2024</MenuItem>
                 </Select>
               </div>
               <div>
@@ -187,9 +203,9 @@ export default function Card({
                   value={horarioReserva}
                   onChange={(e) => setHorarioReserva(e.target.value)}
                 >
-                  <MenuItem value="10:00">18:00</MenuItem>
-                  <MenuItem value="12:00">19:00</MenuItem>
-                  <MenuItem value="15:00">20:00</MenuItem>
+                  <MenuItem value="18:00">18:00</MenuItem>
+                  <MenuItem value="19:00">19:00</MenuItem>
+                  <MenuItem value="20:00">20:00</MenuItem>
                 </Select>
               </div>
             </form>

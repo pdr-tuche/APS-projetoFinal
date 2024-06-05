@@ -1,9 +1,11 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Box } from "@mui/material";
 
 import Card from "../../Components/Card";
 import restaurants from "../../assets/data/restaurants.json";
+import axios from "axios";
+import { API_BASE_URL } from "../../api";
 
 const Container = styled.div`
   padding: 32px 0;
@@ -11,7 +13,7 @@ const Container = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 32px;
 
-  @media (max-width: 850px){
+  @media (max-width: 850px) {
     display: flex;
     flex-direction: column;
   }
@@ -19,14 +21,30 @@ const Container = styled.div`
 
 export function Home() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [userID, setUserID] = useState("");
 
-  // Função para busca
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/restaurants`);
+        setFilteredRestaurants(response.data);
+
+        const storedUserId = localStorage.getItem("userID");
+        setUserID(storedUserId);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [userID]);
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filtrar restaurantes com base na busca
-  const filteredRestaurants = restaurants.filter((restaurant) =>
+  const filteredRestaurantsFake = restaurants.filter((restaurant) =>
     restaurant.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -45,14 +63,20 @@ export function Home() {
         {filteredRestaurants.map((restaurant, index) => (
           <Card
             key={index}
-            imagem={restaurant.imagem}
-            nome={restaurant.nome}
-            localizacao={restaurant.localizacao}
-            avaliacao={restaurant.avaliacao}
-            sobre={restaurant.sobre}
-            horarioFuncionamento={restaurant.horarioFuncionamento}
-            datasDisponiveis={restaurant.datasDisponiveis}
-            horariosDisponiveis={restaurant.horarioFuncionamento}
+            imagem={filteredRestaurantsFake[index].imagem}
+            nome={restaurant.name}
+            localizacao={restaurant.address}
+            avaliacao={filteredRestaurantsFake[index].avaliacao}
+            sobre={restaurant.description}
+            horarioFuncionamento={
+              filteredRestaurantsFake[index].horarioFuncionamento
+            }
+            datasDisponiveis={filteredRestaurantsFake[index].datasDisponiveis}
+            horariosDisponiveis={
+              filteredRestaurantsFake[index].horarioFuncionamento
+            }
+            userID={+localStorage.getItem("userID")}
+            restaurantID={restaurant.id}
           />
         ))}
       </Container>

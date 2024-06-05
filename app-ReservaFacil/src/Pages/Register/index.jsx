@@ -9,36 +9,56 @@ import {
   SubmitButton,
 } from "./style";
 import logo from "../../assets/img/logo.png";
+import axios from "axios";
+import { API_BASE_URL } from "../../api";
 
 export function Register() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   // Função para lidar com o envio do formulário
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Verificação se todos os campos estão preenchidos
     if (!email || !password || !confirmPassword) {
       toast.error("Por favor, preencha todos os campos.");
       return;
     }
 
-    // Verificação se as senhas coincidem
     if (password !== confirmPassword) {
       toast.error("As senhas não coincidem");
       return;
     }
 
-    toast.success("Cadastro realizado com sucesso!");
+    const userData = {
+      email: email,
+      password: password,
+      name: "String",
+      role: "Comum"
+    };
 
-    // Redirecionar para a página de login após 2 segundos
-    setTimeout(() => {
-      navigate("/login");
-    }, 2000);
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/users`,
+        userData
+      );
+
+      if (response.status === 201) {
+        toast.success("Cadastro realizado com sucesso!");
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } else {
+        toast.error("Erro no cadastro. Tente novamente.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro na comunicação com o servidor.");
+    }
   };
 
   return (
