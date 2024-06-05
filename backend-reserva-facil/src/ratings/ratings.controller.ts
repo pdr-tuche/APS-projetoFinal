@@ -27,8 +27,8 @@ export class RatingsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Rating> {
-    return this.ratingsService.findOne(+id);
+  findOne(@Param('id') id: string) {
+    return this.ratingsService.findByRestaurantId(+id);
   }
 
   @Patch(':id')

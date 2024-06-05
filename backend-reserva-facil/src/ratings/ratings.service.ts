@@ -27,6 +27,20 @@ export class RatingsService {
     });
   }
 
+  async findByRestaurantId(restaurantId: number) {
+    const ratings = await this.prisma.ratings.findMany({
+      where: { restaurantId },
+    });
+
+    const averageRating =
+      ratings.reduce((acc, rating) => acc + rating.rating, 0) / ratings.length;
+
+    return {
+      restaurantId: restaurantId,
+      average: averageRating,
+    };
+  }
+
   async update(id: number, updateRatingDto: UpdateRatingDto): Promise<Rating> {
     return await this.prisma.ratings.update({
       where: { id },
