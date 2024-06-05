@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  email       String       @unique
+  name        String
+  role        String
+  password    String
+  restaurants Restaurant[]
+  ratings     Ratings[]
+  Schedule    Schedule[]
+
+  @@map("users")
+}
+
+model Restaurant {
+  id Int @id @default(autoincrement())
+
+  name         String
+  description  String
+  address      String
+  reservations Int
+  UserId       Int
+  manager      User       @relation(fields: [UserId], references: [id])
+  ratings      Ratings[]
+  Schedule     Schedule[]
+
+  @@map("restaurants")
+}
+
+model Ratings {
+  id Int @id @default(autoincrement())
+
+  rating       Int
+  comment      String
+  restaurantId Int
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  userId       Int
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@map("ratings")
+}
+
+model Schedule {
+  id Int @id @default(autoincrement())
+
+  day          String
+  checkIn      String
+  checkOut     String
+  restaurantId Int
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  userId       Int
+  user         User       @relation(fields: [userId], references: [id])
+
+  @@map("schedules")
+}
