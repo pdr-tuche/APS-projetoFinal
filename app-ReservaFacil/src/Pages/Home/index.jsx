@@ -1,9 +1,11 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Box } from "@mui/material";
 
 import Card from "../../Components/Card";
-import restaurants from "../../assets/data/restaurants.json";
+import data from "../../assets/data/restaurants.json";
+import axios from "axios";
+import { API_BASE_URL } from "../../api";
 
 const Container = styled.div`
   padding: 32px 0;
@@ -11,7 +13,7 @@ const Container = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 32px;
 
-  @media (max-width: 850px){
+  @media (max-width: 850px) {
     display: flex;
     flex-direction: column;
   }
@@ -19,15 +21,26 @@ const Container = styled.div`
 
 export function Home() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [restaurants, setRestaurants] = useState([]);
 
-  // Função para busca
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/restaurants`);
+        setRestaurants(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filtrar restaurantes com base na busca
   const filteredRestaurants = restaurants.filter((restaurant) =>
-    restaurant.nome.toLowerCase().includes(searchTerm.toLowerCase())
+    restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -45,12 +58,16 @@ export function Home() {
         {filteredRestaurants.map((restaurant, index) => (
           <Card
             key={index}
-            imagem={restaurant.imagem}
-            nome={restaurant.nome}
-            localizacao={restaurant.localizacao}
+            imagem={data[0].imagem}
+            nome={restaurant.name}
+            localizacao={restaurant.address}
             avaliacao={restaurant.avaliacao}
+            sobre={restaurant.description}
             horarioFuncionamento={restaurant.horarioFuncionamento}
-            sobre={restaurant.sobre}
+            datasDisponiveis={restaurant.datasDisponiveis}
+            horariosDisponiveis={restaurant.horarioFuncionamento}
+            userID={+localStorage.getItem("userID")}
+            restaurantID={restaurant.id}
           />
         ))}
       </Container>

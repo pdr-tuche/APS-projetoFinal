@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { useLocation } from "react-router-dom";
 import {
@@ -17,52 +17,133 @@ import {
   MenuItem,
   Divider,
 } from "@mui/material";
+import axios from "axios";
+import { API_BASE_URL } from "../../api";
 
 export default function Card({
   imagem,
   nome,
   localizacao,
   sobre,
-  avaliacao,
+  horarioFuncionamento,
   reservaData,
   reservaHorario,
-  reservaMesa,
-  horarioFuncionamento,
+  userID,
+  restaurantID,
+  reservationID,
+  avaliacaoID
 }) {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [dataReserva, setDataReserva] = useState("");
   const [horarioReserva, setHorarioReserva] = useState("");
   const [avaliacaoReserva, setAvaliacaoReserva] = useState(0);
+  const [userRating, setUserRating] = useState(null);
 
-  const isLoggedIn = true;
-
-  const handleReservarMesa = () => {
-    if (isLoggedIn === false) {
-      toast.error(
-        "É necessário estar logado para efetuar a reserva de uma mesa."
-      );
-    } else {
-      setOpen(true);
-    }
+  const handleOpen = () => {
+    setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleReservar = () => {
+  const handleReservar = async () => {
     if (!dataReserva || !horarioReserva) {
       toast.error("Por favor, preencha todos os campos.");
-    } else {
-      toast.success("Reserva realizada com sucesso.");
-      handleClose();
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${API_BASE_URL}/schedules`, {
+        day: dataReserva,
+        checkIn: horarioReserva,
+        checkOut: "00:00",
+        restaurantId: restaurantID,
+        userId: userID,
+      });
+
+      if (response.status === 201) {
+        toast.success("Reserva realizada com sucesso.");
+        handleClose();
+      } else {
+        toast.error("Erro ao realizar a reserva. Tente novamente.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao realizar a reserva. Tente novamente.");
     }
   };
 
-  const handleCancelarReserva = () => {
-    toast.success("Reserva cancelada com sucesso.");
+  const handleCancelarReserva = async () => {
+    if (!reservaData || !reservaHorario) {
+      toast.error("Reserva inválida. Verifique os dados.");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `${API_BASE_URL}/schedules/${reservationID}`,
+        {
+          data: {},
+        }
+      );
+
+      if (response.status === 204) {
+        toast.success("Reserva cancelada com sucesso.");
+        window.location.reload();
+      } else {
+        toast.error("Erro ao cancelar a reserva. Tente novamente.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao cancelar a reserva. Tente novamente.");
+    }
   };
+
+  const handleAvaliar = async (newValue) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/ratings`, {
+        rating: newValue,
+        comment: "...",
+        restaurantId: restaurantID,
+        userId: userID,
+      });
+
+      if (response.status === 201) {
+        toast.success("Avaliação enviada com sucesso!");
+        setAvaliacaoReserva(newValue);
+      } else {
+        toast.error("Erro ao enviar avaliação. Tente novamente.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao enviar avaliação. Tente novamente.");
+    }
+  };
+
+  const fetchUserRating = async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/ratings/${restaurantID}`
+      );
+
+      if (response.status === 200) {
+        const ratings = response.data;
+        setUserRating(ratings.average);
+      } else {
+        console.error("Error fetching user rating:", response);
+      }
+    } catch (error) {
+      console.error("Error fetching user rating:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (location.pathname !== "/MinhasReservas" && userID) {
+      fetchUserRating();
+    }
+  });
 
   return (
     <MUICard>
@@ -99,12 +180,14 @@ export default function Card({
             </Typography>
           </Stack>
           {location.pathname !== "/MinhasReservas" && (
-            <Rating value={avaliacao} readOnly size="small" />
+            <Rating name="user-rating" value={userRating} readOnly />
           )}
         </Stack>
-        <Typography variant="body2">{sobre}</Typography>{" "}
+        <Typography variant="body2">{sobre}</Typography>
+        <Typography variant="body2">{horarioFuncionamento}</Typography>
         {location.pathname === "/MinhasReservas" ? (
           <Stack spacing={1}>
+            <Divider />
             <Typography variant="body2">Data: {reservaData}</Typography>
             <Typography variant="body2">Horário: {reservaHorario}</Typography>
             <Divider />
@@ -120,8 +203,7 @@ export default function Card({
                 name="avaliacaoReserva"
                 value={avaliacaoReserva}
                 onChange={(event, newValue) => {
-                  setAvaliacaoReserva(newValue);
-                  toast.success("Avaliação realizada com sucesso.");
+                  handleAvaliar(newValue);
                 }}
               />
             </Stack>
@@ -139,7 +221,7 @@ export default function Card({
             variant="contained"
             sx={{ backgroundColor: "#003285" }}
             fullWidth
-            onClick={handleReservarMesa}
+            onClick={handleOpen}
           >
             Reservar mesa
           </Button>
@@ -158,13 +240,11 @@ export default function Card({
                   value={dataReserva}
                   onChange={(e) => setDataReserva(e.target.value)}
                 >
-                  <MenuItem value="2024-05-28">28/05/2024</MenuItem>
-                  <MenuItem value="2024-05-29">29/05/2024</MenuItem>
-                  <MenuItem value="2024-05-29">30/05/2024</MenuItem>
-
+                  <MenuItem value="06/06/2024">06/06/2024</MenuItem>
+                  <MenuItem value="07/06/2024">07/06/2024</MenuItem>
+                  <MenuItem value="08/06/2024">08/06/2024</MenuItem>
                 </Select>
               </div>
-
               <div>
                 <InputLabel htmlFor="horario">Horário</InputLabel>
                 <Select
@@ -173,9 +253,9 @@ export default function Card({
                   value={horarioReserva}
                   onChange={(e) => setHorarioReserva(e.target.value)}
                 >
-                  <MenuItem value="10:00">18:00</MenuItem>
-                  <MenuItem value="12:00">19:00</MenuItem>
-                  <MenuItem value="15:00">20:00</MenuItem>
+                  <MenuItem value="18:00">18:00</MenuItem>
+                  <MenuItem value="19:00">19:00</MenuItem>
+                  <MenuItem value="20:00">20:00</MenuItem>
                 </Select>
               </div>
             </form>

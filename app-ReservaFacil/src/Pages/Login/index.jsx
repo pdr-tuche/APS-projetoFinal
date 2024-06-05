@@ -13,6 +13,8 @@ import {
 
 import logo from "../../assets/img/logo.png";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_BASE_URL } from "../../api";
 
 export function Login() {
   const navigate = useNavigate();
@@ -20,14 +22,37 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Função para enviar o formulário de login e verificar se está cadastrado
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (email === "usuario@gmail.com" && password === "1234") {
-      // Redirecionar para o Home
-      navigate("/")
-    } else {
-      toast.error("Email ou senha incorretos.");
+
+    if (!email || !password) {
+      toast.error("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    const userData = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/login`,
+        userData
+      );
+
+      if (response.status === 200) {
+        const id = response.data.id;
+
+        localStorage.setItem("userID", id);
+
+        navigate("/");
+      } else {
+        toast.error("Email ou senha incorretos.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro na comunicação com o servidor.");
     }
   };
 
