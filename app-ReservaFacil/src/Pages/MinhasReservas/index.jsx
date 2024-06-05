@@ -1,7 +1,6 @@
 import {
   SetasVoltar,
   Container,
-  ContainerPoucasReservas,
   LinkExterno,
   Mensagem,
 } from "./style";
@@ -13,7 +12,6 @@ import data from "../../assets/data/restaurants.json";
 
 export function MinhasReservas() {
   const [reservas, setReservas] = useState([]);
-  const temPoucasReservas = reservas.length < 2;
   const temReservas = reservas.length > 0;
 
   useEffect(() => {
@@ -46,37 +44,23 @@ export function MinhasReservas() {
         </SetasVoltar>
       </LinkExterno>
       {temReservas ? (
-        temPoucasReservas ? (
-          <ContainerPoucasReservas>
-            {reservas.map((reserva, index) => (
-              <Card
-                key={index}
-                imagem={reserva.imagem}
-                nome={reserva.nome}
-                localizacao={reserva.localizacao}
-                sobre={reserva.sobre}
-                horarioFuncionamento={reserva.horarioFuncionamento}
-                reservaData={reserva.data}
-                reservaHorario={reserva.horario}
-              />
-            ))}
-          </ContainerPoucasReservas>
-        ) : (
-          <Container>
-            {reservas.map((reserva, index) => (
-              <Card
-                key={index}
-                imagem={reserva.restaurant.imagem ?? data[index].imagem}
-                nome={reserva.restaurant.name}
-                localizacao={reserva.restaurant.address}
-                sobre={reserva.restaurant.description}
-                horarioFuncionamento={reserva.horarioFuncionamento}
-                reservaData={reserva.day}
-                reservaHorario={reserva.checkIn}
-              />
-            ))}
-          </Container>
-        )
+        <Container>
+          {reservas.map((reserva, index) => (
+            <Card
+              key={index}
+              imagem={data[0].imagem}
+              nome={reserva.restaurant.name}
+              localizacao={reserva.restaurant.address}
+              sobre={reserva.restaurant.description}
+              horarioFuncionamento={reserva.horarioFuncionamento}
+              reservaData={reserva.day}
+              reservaHorario={reserva.checkIn}
+              reservationID={reserva.id} 
+              restaurantID={reserva.restaurant.id}
+              userID={reserva.userId}
+            />
+          ))}
+        </Container>
       ) : (
         <Mensagem>Não existem reservas ainda. =)</Mensagem>
       )}

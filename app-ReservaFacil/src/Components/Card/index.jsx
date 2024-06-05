@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { useLocation } from "react-router-dom";
 import {
@@ -18,6 +18,7 @@ import {
   Divider,
 } from "@mui/material";
 import axios from "axios";
+import { API_BASE_URL } from "../../api";
 
 export default function Card({
   imagem,
@@ -29,13 +30,15 @@ export default function Card({
   reservaHorario,
   userID,
   restaurantID,
+  reservationID,
+  avaliacaoID
 }) {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [dataReserva, setDataReserva] = useState("");
   const [horarioReserva, setHorarioReserva] = useState("");
   const [avaliacaoReserva, setAvaliacaoReserva] = useState(0);
-  const [avaliacoes, setAvaliacoes] = useState([]);
+  const [userRating, setUserRating] = useState(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -52,16 +55,13 @@ export default function Card({
     }
 
     try {
-      const response = await axios.post(
-        "https://aps-projetofinal-backend.onrender.com/schedules",
-        {
-          day: dataReserva,
-          checkIn: horarioReserva,
-          checkOut: "00:00",
-          restaurantId: restaurantID,
-          userId: userID,
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/schedules`, {
+        day: dataReserva,
+        checkIn: horarioReserva,
+        checkOut: "00:00",
+        restaurantId: restaurantID,
+        userId: userID,
+      });
 
       if (response.status === 201) {
         toast.success("Reserva realizada com sucesso.");
@@ -75,25 +75,75 @@ export default function Card({
     }
   };
 
-  const handleCancelarReserva = () => {
-    toast.success("Reserva cancelada com sucesso.");
+  const handleCancelarReserva = async () => {
+    if (!reservaData || !reservaHorario) {
+      toast.error("Reserva inválida. Verifique os dados.");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `${API_BASE_URL}/schedules/${reservationID}`,
+        {
+          data: {},
+        }
+      );
+
+      if (response.status === 204) {
+        toast.success("Reserva cancelada com sucesso.");
+        window.location.reload();
+      } else {
+        toast.error("Erro ao cancelar a reserva. Tente novamente.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao cancelar a reserva. Tente novamente.");
+    }
   };
 
-  const handleAvaliar = (newValue) => {
-    setAvaliacaoReserva(newValue);
-    setAvaliacoes((prev) => {
-      const novasAvaliacoes = [...prev, newValue];
-      const media =
-        novasAvaliacoes.reduce((acc, curr) => acc + curr, 0) /
-        novasAvaliacoes.length;
-      return { media, novasAvaliacoes };
-    });
-    toast.success("Avaliação realizada com sucesso.");
+  const handleAvaliar = async (newValue) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/ratings`, {
+        rating: newValue,
+        comment: "...",
+        restaurantId: restaurantID,
+        userId: userID,
+      });
+
+      if (response.status === 201) {
+        toast.success("Avaliação enviada com sucesso!");
+        setAvaliacaoReserva(newValue);
+      } else {
+        toast.error("Erro ao enviar avaliação. Tente novamente.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao enviar avaliação. Tente novamente.");
+    }
   };
 
-  const mediaAvaliacoes = avaliacoes.length
-    ? avaliacoes.reduce((acc, curr) => acc + curr, 0) / avaliacoes.length
-    : 0;
+  const fetchUserRating = async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/ratings/${restaurantID}`
+      );
+
+      if (response.status === 200) {
+        const ratings = response.data;
+        setUserRating(ratings.average);
+      } else {
+        console.error("Error fetching user rating:", response);
+      }
+    } catch (error) {
+      console.error("Error fetching user rating:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (location.pathname !== "/MinhasReservas" && userID) {
+      fetchUserRating();
+    }
+  });
 
   return (
     <MUICard>
@@ -130,7 +180,7 @@ export default function Card({
             </Typography>
           </Stack>
           {location.pathname !== "/MinhasReservas" && (
-            <Rating name="media-avaliacoes" value={mediaAvaliacoes} readOnly />
+            <Rating name="user-rating" value={userRating} readOnly />
           )}
         </Stack>
         <Typography variant="body2">{sobre}</Typography>
