@@ -18,6 +18,7 @@ Sistema de Reservas de Restaurantes desenvolvido para facilitar a interação en
   - cd backend-reserva-facil
   - npm install
   - npm run start:dev
+  - npm run start:prod
 
 ## Link do deploy:
 
