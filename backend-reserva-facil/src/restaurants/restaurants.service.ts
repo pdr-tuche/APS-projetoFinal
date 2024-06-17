@@ -12,7 +12,6 @@ export class RestaurantsService {
     const manager = await this.prisma.user.findUnique({
       where: { id: createRestaurantDto.userId },
     });
-    console.log(manager);
     if (!manager) {
       throw new Error('User not found');
     }

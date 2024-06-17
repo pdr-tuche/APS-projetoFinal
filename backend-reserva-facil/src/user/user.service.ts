@@ -3,25 +3,23 @@ import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UserWithoutPasswordDTO } from './dto/user-without-password.dto';
 import { User } from './entities/user.entity';
-import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const data: Prisma.UserCreateInput = {
+  async create(createUserDto: CreateUserDto): Promise<UserWithoutPasswordDTO> {
+    const data: User = {
       ...createUserDto,
       password: await bcrypt.hash(createUserDto.password, 10),
     };
 
-    const createdUser = await this.prisma.user.create({ data });
+    await this.prisma.user.create({ data });
 
-    return {
-      ...createdUser,
-      password: undefined,
-    };
+    return new UserWithoutPasswordDTO(data);
   }
 
   findByEmail(email: string) {
@@ -43,7 +41,7 @@ export class UserService {
     };
   }
 
-  async update(id: number, newUser: CreateUserDto) {
+  async update(id: number, newUser: UpdateUserDto) {
     const data: Prisma.UserUpdateInput = {
       ...newUser,
       password: await bcrypt.hash(newUser.password, 10),

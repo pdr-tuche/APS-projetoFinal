@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { RatingsModule } from './ratings/ratings.module';
 import { SchedulesModule } from './schedules/schedules.module';
+import { IsUniqueEmailConstraint } from './user/dto/decorators/validation/is-unique-email-constraint.validation';
 
 @Module({
   imports: [
@@ -20,12 +21,13 @@ import { SchedulesModule } from './schedules/schedules.module';
   ],
   controllers: [],
   providers: [
-    UserService,
+    // UserService,
     // colocar autenticacao nas rotas
     /*{
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },*/
+    IsUniqueEmailConstraint,
   ],
 })
 export class AppModule {}

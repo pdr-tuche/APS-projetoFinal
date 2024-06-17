@@ -5,43 +5,13 @@ import {
   Matches,
   MaxLength,
   MinLength,
-  Validate,
 } from 'class-validator';
-
-// Custom validator for role
-import {
-  registerDecorator,
-  ValidationArguments,
-  ValidationOptions,
-  ValidatorConstraint,
-  ValidatorConstraintInterface,
-} from 'class-validator';
-
-@ValidatorConstraint({ async: false })
-export class IsComumRoleConstraint implements ValidatorConstraintInterface {
-  validate(role: any, args: ValidationArguments) {
-    return role === 'Comum';
-  }
-
-  defaultMessage(args: ValidationArguments) {
-    return 'Role must be "Comum"';
-  }
-}
-
-export function IsComumRole(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
-    registerDecorator({
-      target: object.constructor,
-      propertyName: propertyName,
-      options: validationOptions,
-      constraints: [],
-      validator: IsComumRoleConstraint,
-    });
-  };
-}
+import { IsComumRole } from './decorators/is-comum-role.decorator';
+import { IsUniqueEmail } from './decorators/is-unique-email.decorator';
 
 export class CreateUserDto extends User {
   @IsEmail()
+  @IsUniqueEmail()
   email: string;
 
   @IsString()

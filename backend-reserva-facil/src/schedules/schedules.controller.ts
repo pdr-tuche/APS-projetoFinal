@@ -18,7 +18,6 @@ export class ScheduleController {
 
   @Post()
   create(@Body() createScheduleDto: CreateScheduleDto) {
-    console.log('createScheduleDto', createScheduleDto);
     return this.scheduleService.create(createScheduleDto);
   }
 
