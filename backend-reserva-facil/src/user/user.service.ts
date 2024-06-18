@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserWithoutPasswordDTO } from './dto/user-without-password.dto';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserWithRestaurantsWithoutPasswordDTO } from './dto/user-with-restaurants-without-password.dto';
 
 @Injectable()
 export class UserService {
@@ -35,16 +36,13 @@ export class UserService {
       where: { id },
       include: { restaurants: true },
     });
-    return {
-      ...user,
-      password: undefined,
-    };
+
+    return new UserWithRestaurantsWithoutPasswordDTO(user);
   }
 
   async update(id: number, newUser: UpdateUserDto) {
     const data: Prisma.UserUpdateInput = {
       ...newUser,
-      password: await bcrypt.hash(newUser.password, 10),
     };
 
     const updatedUser = await this.prisma.user.update({
@@ -52,10 +50,7 @@ export class UserService {
       data,
     });
 
-    return {
-      ...updatedUser,
-      password: undefined,
-    };
+    return new UserWithoutPasswordDTO(updatedUser);
   }
 
   async delete(id: number) {

@@ -11,6 +11,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -29,17 +30,17 @@ export class UserController {
 
   @Get(':id')
   findById(@Param('id') id: string) {
-    return this.userService.findById(Number(id));
+    return this.userService.findById(+id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() createUserDto: CreateUserDto) {
-    return this.userService.update(Number(id), createUserDto);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
   delete(@Param('id') id: string) {
-    return this.userService.delete(Number(id));
+    return this.userService.delete(+id);
   }
 }
