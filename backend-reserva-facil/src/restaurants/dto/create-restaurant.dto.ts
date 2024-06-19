@@ -14,5 +14,5 @@ export class CreateRestaurantDto {
   reservations: number;
 
   @IsNumber()
-  userId: number;
+  manager: number;
 }
