@@ -29,16 +29,37 @@ export class ScheduleService {
   }
 
   async findAll() {
-    return await this.prisma.schedule.findMany({
+    const schedules = await this.prisma.schedule.findMany({
       include: { restaurant: true, user: true },
+    });
+
+    return schedules.map((schedule) => {
+      const { user } = schedule;
+      schedule.user = {
+        ...user,
+        password: undefined,
+      };
+      return schedule;
     });
   }
 
   async findOne(id: number) {
-    return await this.prisma.schedule.findUnique({
+    const schedule = await this.prisma.schedule.findUnique({
       where: { id },
       include: { restaurant: true, user: true },
     });
+
+    if (!schedule) {
+      throw new Error('Schedule not found');
+    }
+
+    const { user } = schedule;
+    schedule.user = {
+      ...user,
+      password: undefined,
+    };
+
+    return schedule;
   }
 
   async update(id: number, data: UpdateScheduleDto) {
